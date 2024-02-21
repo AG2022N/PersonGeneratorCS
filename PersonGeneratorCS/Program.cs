@@ -4,52 +4,52 @@ class Program
     static void Main()
     {
         //Setup Start
-        string FirstNamesMalePath = @"NamesMale.txt";
-        string FirstNamesFemalePath = @"NamesFemale.txt";
-        string LastNamesPath = @"LastNames.txt";
-        string JobsPath = @"Jobs.txt";
-        Initialize(FirstNamesMalePath, FirstNamesFemalePath, LastNamesPath, JobsPath);
+        string FirstNamesMalePath = @"DataNamesMale.txt";
+        string FirstNamesFemalePath = @"DataNamesFemale.txt";
+        string LastNamesPath = @"DataLastNames.txt";
+        string OccupationsPath = @"DataOccupations.txt";
+        Initialize(FirstNamesMalePath, FirstNamesFemalePath, LastNamesPath, OccupationsPath);
         string[] FirstNamesMale = File.ReadAllLines(FirstNamesMalePath);
         string[] FirstNamesFemale = File.ReadAllLines(FirstNamesFemalePath);
         string[] LastNames = File.ReadAllLines(LastNamesPath);
-        string[] Jobs = File.ReadAllLines(JobsPath);
+        string[] Occupations = File.ReadAllLines(OccupationsPath);
         string Filepath;
         //Setup End
 
         //Program Start
         int Quantity = 100;
-        Console.WriteLine("Writing...");
         for (int Counter = 1; Counter <= Quantity;)
         {
             Filepath = (@"OutputPerson" + Counter + ".json");
             Random rand = new Random();
             bool IsFemale = rand.Next(2) == 1;
             string[] FirstName = FirstNamesMale; if (IsFemale) { FirstName = FirstNamesFemale; }
-            Person PersonInst = PersonGenerate(IsFemale, FirstName, LastNames, Jobs, rand);
+            Person PersonInst = PersonGenerate(IsFemale, FirstName, LastNames, Occupations, rand);
             PersonObjectToJson(Filepath, PersonInst);
             Console.WriteLine(Counter + "/" + Quantity);
             Console.WriteLine("Name: " + PersonInst.FirstName + " " + PersonInst.LastName);
-            Console.WriteLine("Job: " + PersonInst.Job + "\n");
+            Console.WriteLine("Sex: " + PersonInst.Sex);
+            Console.WriteLine("Occupation: " + PersonInst.Occupation);
             Counter++;
         }
         Console.Write("Finished!");
         Console.ReadKey();
         //Program End
     }
-    public class Person(string ConstSex, string ConstFirstName, string ConstLastName, string ConstJob)
+    public class Person(string ConstSex, string ConstFirstName, string ConstLastName, string ConstOccupation)
     {
         public string Sex = ConstSex;
         public string FirstName = ConstFirstName;
         public string LastName = ConstLastName;
-        public string Job = ConstJob;
+        public string Occupation = ConstOccupation;
     }
-    public static Person PersonGenerate(bool IsFemale, string[] FirstNames, string[] LastNames, string[] Jobs, Random rand)
+    public static Person PersonGenerate(bool IsFemale, string[] FirstNames, string[] LastNames, string[] Occupations, Random rand)
     {
         string Sex = "Male"; if (IsFemale) { Sex = "Female"; }
         string RandomFirstName = FirstNames[rand.Next(FirstNames.Length)];
         string RandomLastName = LastNames[rand.Next(LastNames.Length)];
-        string RandomJob = Jobs[rand.Next(Jobs.Length)];
-        Person p = new Person(Sex, RandomFirstName, RandomLastName, RandomJob);
+        string RandomOccupation = Occupations[rand.Next(Occupations.Length)];
+        Person p = new Person(Sex, RandomFirstName, RandomLastName, RandomOccupation);
         return p;
     }
     public static void PersonObjectToJson(string Filepath, Person Person)
@@ -58,7 +58,7 @@ class Program
         var JsonFormatting = Newtonsoft.Json.JsonConvert.SerializeObject(Person);
         System.IO.File.WriteAllText(Path, JsonFormatting);
     }
-    static void Initialize(string FirstNamesMalePath, string FirstNamesFemalePath, string LastNamesPath, string JobsPath)
+    static void Initialize(string FirstNamesMalePath, string FirstNamesFemalePath, string LastNamesPath, string OccupationsPath)
     {
         if (!File.Exists(FirstNamesMalePath))
         {
@@ -81,11 +81,11 @@ class Program
             WriteNamesLast.Write("LastName1\nLastName2\nLastName3\nLastName4\nLastName5");
             WriteNamesLast.Close();
         }
-        if (!File.Exists(JobsPath))
+        if (!File.Exists(OccupationsPath))
         {
-            File.Create(JobsPath).Close();
-            var WriteNamesLast = new StreamWriter(JobsPath, true, Encoding.ASCII);
-            WriteNamesLast.Write("Jobs1\nJobs2\nJobs3\nJobs4\nJobs5");
+            File.Create(OccupationsPath).Close();
+            var WriteNamesLast = new StreamWriter(OccupationsPath, true, Encoding.ASCII);
+            WriteNamesLast.Write("Occupation1\nOccupation2\nOccupation3\nOccupation4\nOccupation5");
             WriteNamesLast.Close();
         }
     }
