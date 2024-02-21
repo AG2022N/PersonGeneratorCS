@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Threading.Channels;
 class Program
 {
     static void Main()
@@ -18,19 +17,20 @@ class Program
         //Setup End
 
         //Program Start
+        int Quantity = 100;
         Console.WriteLine("Writing...");
-        for (int i = 1; i <= 50;)
+        for (int Counter = 1; Counter <= Quantity;)
         {
-            Filepath = (@"OutputPerson" + i + ".json");
+            Filepath = (@"OutputPerson" + Counter + ".json");
             Random rand = new Random();
             bool IsFemale = rand.Next(2) == 1;
             string[] FirstName = FirstNamesMale; if (IsFemale) { FirstName = FirstNamesFemale; }
             Person PersonInst = PersonGenerate(IsFemale, FirstName, LastNames, Jobs, rand);
             PersonObjectToJson(Filepath, PersonInst);
-            Console.WriteLine(i + "/50");
+            Console.WriteLine(Counter + "/" + Quantity);
             Console.WriteLine("Name: " + PersonInst.FirstName + " " + PersonInst.LastName);
-            Console.WriteLine("Job: " + PersonInst.Job);
-            i++;
+            Console.WriteLine("Job: " + PersonInst.Job + "\n");
+            Counter++;
         }
         Console.Write("Finished!");
         Console.ReadKey();
